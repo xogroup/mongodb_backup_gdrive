@@ -1,4 +1,4 @@
-## RDS Backup to Google Team Drive
+## MongoDB Backup to Google Team Drive
 
 This repo contains the Docker image that will capture a RDS Postgres Database backup in production and upload it to a Google Team Drive.
 
