@@ -1,0 +1,65 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: <databasename>-backup
+spec:
+  schedule: "* 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: <databasename>-backup
+            image: xogroup/mongodb_backup_gdrive
+            env:
+              - name: RCLONE_REFRESH_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: rclone_refresh_token
+              - name: RCLONE_TEAM_DRIVE
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: rclone_team_drive
+              - name: RCLONE_EXPIRY
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: rclone_expiry
+              - name: RCLONE_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: rclone_access_token
+              - name: REPLICASET
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: replicaset
+              - name: DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: database
+              - name: HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: host
+              - name: USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: username
+              - name: PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: password
+              - name: AUTHDB
+                valueFrom:
+                  secretKeyRef:
+                    name: <k8_db_backup_secret_name>
+                    key: authdb
+          restartPolicy: OnFailure
