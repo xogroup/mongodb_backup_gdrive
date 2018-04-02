@@ -69,16 +69,19 @@ $ docker run -it --rm \
       - E.g. If the value for `rclone_refresh_token` is `abcdefg`, the value would be `YWJjZGVmZw==`.
       - To get the base 64 encoded version, run `echo -n "abcdefg" | base64`.
 2. Use that secrets file to create a new secret in Kubernetes in your namespace
-    - `kubectl create -f <name_of_secrets_file>.yaml --namespace <your_team_namespace>`
+    ```
+    $ docker run -it -v `pwd`:/tmp xogroup/xo-helm:preprod kubectl create -f /tmp/<path to the secrets file>.yaml --namespace coreservices
+    ```
     - You should see `secret "<k8_db_backup_secret_name>" created` in the console if it was created successfully
-    - docker run -it -v `pwd`:/tmp xogroup/xo-helm:preprod kubectl create -f /tmp/notifications-api-qa-backup-secrets.yaml --namespace coreservices
 3. Create a cronjob from `cronjob-template.yaml`
     - Create a copy of [cronjob-template.yaml](templates/cronjob-template.yaml)
     - Edit `<name_of_cronjob_and_container>` on line 4 and line 16 to a name you would like for your cronjob and container
     - Edit `spec.schedule: "* 3 * * *"` on line 6 to whenever you would like your job to be run, or leave the default that will run at 3 AM every day
     - Replace all instances of `<k8_db_backup_secret_name>` with the secret created from step 2
-    - Run `kubectl create -f <name_of_cronjob_file>.yaml --namespace <your_team_namespace>` to create the cronjob
-    - docker run -it -v `pwd`:/tmp xogroup/xo-helm:preprod kubectl create -f /tmp/notifications-api-qa-backup-cronjob.yaml --namespace coreservices
+    - Create the cronjob
+      ```
+      $ docker run -it -v `pwd`:/tmp xogroup/xo-helm:preprod kubectl create -f /tmp/<path to the cronjob yaml file> --namespace coreservices
+      ```
     - See [users-rds-backup-cronjob.yaml](users-rds-backup-cronjob.yaml) for a working example
 
 ### Getting logs from pod started by cronjob

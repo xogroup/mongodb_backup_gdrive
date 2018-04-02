@@ -1,0 +1,65 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: weddings-api-qa-backup
+spec:
+  schedule: "16 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: weddings-api-qa-backup
+            image: xogroup/mongodb_backup_gdrive
+            env:
+              - name: RCLONE_REFRESH_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: rclone_refresh_token
+              - name: RCLONE_TEAM_DRIVE
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: rclone_team_drive
+              - name: RCLONE_EXPIRY
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: rclone_expiry
+              - name: RCLONE_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: rclone_access_token
+              - name: REPLICASET
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: replicaset
+              - name: DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: database
+              - name: HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: host
+              - name: USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: username
+              - name: PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: password
+              - name: AUTHDB
+                valueFrom:
+                  secretKeyRef:
+                    name: weddings-api-qa-backup-secrets
+                    key: authdb
+          restartPolicy: OnFailure
